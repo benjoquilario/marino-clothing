@@ -1,18 +1,18 @@
-import NextAuth, { DefaultSession } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import db from '@/db/drizzle';
-import { credentialsValidator } from '@/lib/validators/credentials';
-import { eq } from 'drizzle-orm';
-import { users } from './db/schema/auth';
-import { compareSync } from 'bcrypt-ts-edge';
-import { authConfig } from './auth.config';
+import NextAuth, { DefaultSession } from "next-auth"
+import Credentials from "next-auth/providers/credentials"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import { db } from "@/db"
+import { eq } from "drizzle-orm"
+import { users } from "./db/schema/auth"
+import { authConfig } from "./auth.config"
+import { comparePasswords } from "./lib/auth/session"
+import { userAuthSchema } from "./lib/validators/auth"
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
-      id: string;
-    } & DefaultSession['user'];
+      id: string
+    } & DefaultSession["user"]
   }
 }
 
@@ -21,32 +21,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [
     Credentials({
-      name: 'credentials',
+      name: "credentials",
       async authorize(credentials) {
-        const cred = await credentialsValidator.parseAsync(credentials);
-        if (!cred.email || !cred.password) {
-          return null;
+        const validatedFields = await userAuthSchema.parseAsync(credentials)
+
+        const { email, password } = validatedFields
+
+        if (!email || !password) {
+          return null
         }
 
         const user = await db.query.users.findFirst({
-          where: eq(users.email, cred.email),
-        });
+          where: eq(users.email, email),
+        })
 
         if (user && user.password) {
-          const isPasswordCorrect = compareSync(cred.password, user.password);
+          const isPasswordValid = await comparePasswords(
+            password,
+            user.password
+          )
 
-          if (isPasswordCorrect) {
+          if (isPasswordValid) {
             return {
               id: user.id,
               image: user.image,
               email: user.email,
               name: user.name,
-            };
+            }
           }
         }
 
-        return null;
+        return null
       },
     }),
   ],
-});
+})

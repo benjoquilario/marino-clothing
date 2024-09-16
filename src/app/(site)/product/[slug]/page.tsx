@@ -1,36 +1,36 @@
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation"
 
-import ProductImages from '@/components/products/product-images';
-import ProductPrice from '@/components/products/product-price';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { getProductBySlug } from '@/server/product';
-import { APP_NAME } from '@/lib/constant';
-import { Button } from '@/components/ui/button';
+import ProductImages from "@/components/products/product-images"
+import ProductPrice from "@/components/products/product-price"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { getProductBySlug } from "@/server/product"
+import { APP_NAME } from "@/lib/constant"
+import { Button } from "@/components/ui/button"
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string }
 }) {
-  const product = await getProductBySlug(params.slug);
+  const product = await getProductBySlug(params.slug)
   if (!product) {
-    return { title: 'Product not found' };
+    return { title: "Product not found" }
   }
   return {
     title: `${product.name} - ${APP_NAME}`,
     description: product.description,
-  };
+  }
 }
 
 const ProductDetails = async ({
   params: { slug },
 }: {
-  params: { slug: string };
-  searchParams: { page: string; color: string; size: string };
+  params: { slug: string }
+  searchParams: { page: string; color: string; size: string }
 }) => {
-  const product = await getProductBySlug(slug);
-  if (!product) notFound();
+  const product = await getProductBySlug(slug)
+  if (!product) notFound()
 
   return (
     <>
@@ -40,9 +40,9 @@ const ProductDetails = async ({
             <ProductImages images={product.images!} />
           </div>
 
-          <div className="col-span-2 flex flex-col w-full  gap-8 p-5">
+          <div className="col-span-2 flex w-full flex-col gap-8 p-5">
             <div className="flex flex-col gap-6">
-              <p className="p-medium-16 rounded-full bg-grey-500/10   text-grey-500">
+              <p className="p-medium-16 bg-grey-500/10 text-grey-500 rounded-full">
                 {product.brand} {product.category}
               </p>
               <h1 className="h3-bold">{product.name}</h1>
@@ -83,7 +83,7 @@ const ProductDetails = async ({
                   )}
                 </div>
                 {product.stock !== 0 && (
-                  <div className=" flex-center">
+                  <div className="flex-center">
                     <Button className="w-full">Add to cart</Button>
                   </div>
                 )}
@@ -93,7 +93,7 @@ const ProductDetails = async ({
         </div>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default ProductDetails;
+export default ProductDetails

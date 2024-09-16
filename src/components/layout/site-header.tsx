@@ -1,9 +1,9 @@
-import { ShoppingCart } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { ShoppingCart } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
-import { Button } from '@/components/ui/button';
-import { APP_NAME } from '@/lib/constant';
+import { Button } from "@/components/ui/button"
+import { APP_NAME } from "@/lib/constant"
 
 const Header = async () => {
   return (
@@ -36,7 +36,7 @@ const Header = async () => {
         </div>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
