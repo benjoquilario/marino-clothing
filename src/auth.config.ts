@@ -1,9 +1,9 @@
 import type { NextAuthConfig } from "next-auth"
 import { NextResponse } from "next/server"
 import { db } from "./db"
-import { users } from "./db/schema/auth"
 import { eq } from "drizzle-orm"
 import { cookies } from "next/headers"
+import { carts, users } from "./db/schema"
 
 export const authConfig = {
   pages: {
@@ -28,26 +28,26 @@ export const authConfig = {
         }
 
         token.role = user.role
-        // if (trigger === "signIn" || trigger === "signUp") {
-        //   const sessionCartId = cookies().get("sessionCartId")?.value;
-        //   if (!sessionCartId) throw new Error("Session Cart Not Found");
-        //   const sessionCartExists = await db.query.carts.findFirst({
-        //     where: eq(carts.sessionCartId, sessionCartId),
-        //   });
-        //   if (sessionCartExists && !sessionCartExists.userId) {
-        //     const userCartExists = await db.query.carts.findFirst({
-        //       where: eq(carts.userId, user.id),
-        //     });
-        //     if (userCartExists) {
-        //       cookies().set("beforeSigninSessionCartId", sessionCartId);
-        //       cookies().set("sessionCartId", userCartExists.sessionCartId);
-        //     } else {
-        //       db.update(carts)
-        //         .set({ userId: user.id })
-        //         .where(eq(carts.id, sessionCartExists.id));
-        //     }
-        //   }
-        // }
+        if (trigger === "signIn" || trigger === "signUp") {
+          const sessionCartId = cookies().get("sessionCartId")?.value
+          if (!sessionCartId) throw new Error("Session Cart Not Found")
+          const sessionCartExists = await db.query.carts.findFirst({
+            where: eq(carts.sessionCartId, sessionCartId),
+          })
+          if (sessionCartExists && !sessionCartExists.userId) {
+            const userCartExists = await db.query.carts.findFirst({
+              where: eq(carts.userId, user.id),
+            })
+            if (userCartExists) {
+              cookies().set("beforeSigninSessionCartId", sessionCartId)
+              cookies().set("sessionCartId", userCartExists.sessionCartId)
+            } else {
+              db.update(carts)
+                .set({ userId: user.id })
+                .where(eq(carts.id, sessionCartExists.id))
+            }
+          }
+        }
       }
 
       if (session?.user.name && trigger === "update") {

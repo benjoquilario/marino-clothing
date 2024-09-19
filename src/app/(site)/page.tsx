@@ -1,6 +1,6 @@
-import ProductList from "@/components/products/product-lists"
 // import sampleData from '@/lib/seeder';
 import { getLatestProducts } from "@/server/product"
+import ProductList from "./product/[slug]/_components/product-lists"
 
 export default async function Home() {
   const latestProducts = await getLatestProducts()

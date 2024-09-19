@@ -96,6 +96,7 @@ export async function register(values: RegisterUser) {
     const passwordHash = await hashPassword(password)
 
     await db.insert(users).values({
+      id: crypto.randomUUID(),
       name,
       email,
       password: passwordHash,
