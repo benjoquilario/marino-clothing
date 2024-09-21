@@ -15,11 +15,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { APP_NAME } from "@/lib/constant"
-import { formatCurrency } from "@/lib/utils"
+import { formatCurrency } from "@/lib/format"
 import { getUserById } from "@/server/user"
 import { getCurrentCart } from "@/server/cart"
 import PlaceOrderForm from "./_components/order-form"
-import CheckoutSteps from "@/components/check-out"
+import CheckoutSteps from "@/app/(site)/shipping/_components/check-out"
 
 export const metadata = {
   title: `Place Order - ${APP_NAME}`,

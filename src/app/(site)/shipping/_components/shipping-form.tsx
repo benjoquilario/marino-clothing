@@ -7,7 +7,7 @@ import { shippingAddressSchema } from "@/lib/validators/address"
 import { useToast } from "@/hooks/use-toast"
 import { useTransition } from "react"
 import { updateUserAddress } from "@/server/user"
-import CheckoutSteps from "../../../../components/check-out"
+import CheckoutSteps from "./check-out"
 import {
   Form,
   FormControl,
@@ -52,7 +52,8 @@ export default function ShippingAddressForm({
 
         return
       }
-      router.push("/payment-method")
+
+      router.push("/payment")
     })
   }
   const setShippingLocation = ({ lat, lng }: { lat: number; lng: number }) => {

@@ -12,7 +12,7 @@ import {
 import type { ShippingAddress } from "@/lib/validators/address"
 import type { PaymentResult } from "@/lib/validators/payment"
 import { users, products } from "./"
-import { relations } from "drizzle-orm"
+import { relations, InferSelectModel } from "drizzle-orm"
 
 export const orders = pgTable("order", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -69,3 +69,9 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
     references: [orders.id],
   }),
 }))
+
+export type Order = InferSelectModel<typeof orders> & {
+  orderItems: OrderItem[]
+  user: { name: string | null; email: string }
+}
+export type OrderItem = InferSelectModel<typeof orderItems>

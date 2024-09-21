@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useToast } from "@/hooks/use-toast"
-import { formatCurrency } from "@/lib/utils"
+import { formatCurrency } from "@/lib/format"
 import { ArrowRight, Loader, Minus, Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"

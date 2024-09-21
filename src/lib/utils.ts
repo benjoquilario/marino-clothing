@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { CartItem } from "./validators/cart"
+import qs from "query-string"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -36,18 +37,24 @@ export const calcPrice = (items: CartItem[]) => {
   }
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
-  currency: "USD",
-  style: "currency",
-  minimumFractionDigits: 2,
-})
+export function formUrlQuery({
+  params,
+  key,
+  value,
+}: {
+  params: string
+  key: string
+  value: string | null
+}) {
+  const currentUrl = qs.parse(params)
 
-export function formatCurrency(amount: number | string | null) {
-  if (typeof amount === "number") {
-    return CURRENCY_FORMATTER.format(amount)
-  } else if (typeof amount === "string") {
-    return CURRENCY_FORMATTER.format(Number(amount))
-  } else {
-    return "NaN"
-  }
+  currentUrl[key] = value
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  )
 }

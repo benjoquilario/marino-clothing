@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { updateUserPaymentMethod } from "@/server/user"
-import CheckoutSteps from "@/components/check-out"
+import CheckoutSteps from "@/app/(site)/shipping/_components/check-out"
 
 export default function PaymentMethodForm({
   preferredPaymentMethod,

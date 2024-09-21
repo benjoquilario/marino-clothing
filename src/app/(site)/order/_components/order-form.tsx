@@ -13,7 +13,11 @@ export default function PlaceOrderForm() {
   const submit = async function () {
     const res = await createOrder()
 
-    if (!res.success) setError(res.message as string)
+    if (!res.success) {
+      setError(res.message as string)
+
+      return
+    }
   }
 
   const { isSubmitting } = form.formState
