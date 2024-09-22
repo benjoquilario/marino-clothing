@@ -1,4 +1,3 @@
-import { auth } from "@/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { APP_NAME } from "@/lib/constant"
 import { formatCurrency, formatDateTime, formatNumber } from "@/lib/format"
@@ -21,10 +20,6 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardPage() {
-  const session = await auth()
-  if (session?.user.role !== "admin")
-    throw new Error("admin permission required")
-
   const summary = await getOrderSummary()
 
   return (

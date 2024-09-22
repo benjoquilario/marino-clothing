@@ -171,7 +171,9 @@ export async function getAllOrders({
 export async function deleteOrder(id: string) {
   try {
     await db.delete(orders).where(eq(orders.id, id))
+
     revalidatePath("/admin/orders")
+
     return {
       success: true,
       message: "Order deleted successfully",
