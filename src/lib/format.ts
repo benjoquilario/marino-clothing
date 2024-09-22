@@ -2,6 +2,12 @@ export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`
 }
 
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-US")
+
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number)
+}
+
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short", // abbreviated month name (e.g., 'Oct')

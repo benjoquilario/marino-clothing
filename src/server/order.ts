@@ -5,10 +5,11 @@ import { db } from "@/db"
 import { redirect } from "next/navigation"
 import { getUserById } from "./user"
 import { getCurrentCart } from "./cart"
-import { orders, orderItems, carts, products } from "@/db/schema"
+import { orders, orderItems, carts, products, users } from "@/db/schema"
 import { isRedirectError } from "next/dist/client/components/redirect"
 import { insertOrderSchema } from "@/lib/validators/payment"
-import { eq, desc, count } from "drizzle-orm"
+import { eq, desc, count, sql, sum } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
 
 export const createOrder = async () => {
   try {
@@ -108,5 +109,74 @@ export async function getCurrentOrders({
   return {
     data,
     totalPages: Math.ceil(dataCount[0].count / limit),
+  }
+}
+
+export async function getOrderSummary() {
+  const ordersCount = await db.select({ count: count() }).from(orders)
+  const productsCount = await db.select({ count: count() }).from(products)
+  const usersCount = await db.select({ count: count() }).from(users)
+  const ordersPrice = await db
+    .select({ sum: sum(orders.totalPrice) })
+    .from(orders)
+
+  const salesData = await db
+    .select({
+      months: sql<string>`to_char(${orders.createdAt},'MM/YY')`,
+      totalSales: sql<number>`sum(${orders.totalPrice})`.mapWith(Number),
+    })
+    .from(orders)
+    .groupBy(sql`1`)
+
+  const latestOrders = await db.query.orders.findMany({
+    orderBy: [desc(orders.createdAt)],
+    with: {
+      user: { columns: { name: true } },
+    },
+    limit: 6,
+  })
+
+  return {
+    ordersCount,
+    productsCount,
+    usersCount,
+    ordersPrice,
+    salesData,
+    latestOrders,
+  }
+}
+
+export async function getAllOrders({
+  limit = 3,
+  page,
+}: {
+  limit?: number
+  page: number
+}) {
+  const data = await db.query.orders.findMany({
+    orderBy: [desc(products.createdAt)],
+    limit,
+    offset: (page - 1) * limit,
+    with: { user: { columns: { name: true } } },
+  })
+  const dataCount = await db.select({ count: count() }).from(orders)
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount[0].count / limit),
+  }
+}
+
+// DELETE
+export async function deleteOrder(id: string) {
+  try {
+    await db.delete(orders).where(eq(orders.id, id))
+    revalidatePath("/admin/orders")
+    return {
+      success: true,
+      message: "Order deleted successfully",
+    }
+  } catch (error) {
+    return { success: false, message: error }
   }
 }
