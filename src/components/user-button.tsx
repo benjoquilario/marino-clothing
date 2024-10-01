@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { logout } from "@/server/auth"
+import { GoPerson } from "react-icons/go"
 
 export default async function UserButton() {
   const headersList = headers()
@@ -30,11 +31,8 @@ export default async function UserButton() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center">
-            <Button
-              variant="ghost"
-              className="relative ml-2 h-8 w-8 rounded-full"
-            >
-              {session.user.name}
+            <Button variant="ghost" className="relative px-2 py-0">
+              <GoPerson className="h-6 w-6" />
             </Button>
           </div>
         </DropdownMenuTrigger>
