@@ -1,12 +1,14 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import type { Product } from "@/types"
-import ProductPrice from "./product-price"
+import ProductPrice from "../../app/(site)/product/[slug]/_components/product-price"
 
-const ProductCard = ({ product }: { product: Product }) => {
+const CardRow = ({ product }: { product: Product }) => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="items-center p-0">
@@ -26,7 +28,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
         <div className="grid gap-1.5 text-sm leading-4">
           <Link href={`/product/${product.slug}`}>
-            <h2 className="text-sm font-medium">{product.name}</h2>
+            <h2 className="line-clamp-2 text-sm font-medium">{product.name}</h2>
           </Link>
         </div>
         <div className="flex-between gap-4">
@@ -42,4 +44,4 @@ const ProductCard = ({ product }: { product: Product }) => {
   )
 }
 
-export default ProductCard
+export default CardRow
