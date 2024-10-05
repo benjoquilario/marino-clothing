@@ -57,7 +57,7 @@ export default function AddToCart({
             const res = await addItemToCart(item)
             toast({
               variant: res.success ? "default" : "destructive",
-              description: `${res.message}` ?? "",
+              description: `${res.message ?? ""}`,
             })
             return
           })
@@ -81,7 +81,7 @@ export default function AddToCart({
           if (!res.success) {
             toast({
               variant: "destructive",
-              description: `${res.message}` ?? "",
+              description: `${res.message}`,
             })
             return
           }
