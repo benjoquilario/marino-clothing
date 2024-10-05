@@ -1,3 +1,4 @@
+import { Color, Size } from "@/lib/validators/product"
 import {
   boolean,
   integer,
@@ -7,7 +8,11 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
+  json,
 } from "drizzle-orm/pg-core"
+import { colors } from "./color"
+import { InferSelectModel, relations } from "drizzle-orm"
+import { sizes } from "./size"
 
 export const products = pgTable(
   "product",
@@ -35,3 +40,11 @@ export const products = pgTable(
     }
   }
 )
+
+export const productsRelations = relations(products, ({ many }) => ({
+  colors: many(colors),
+  sizes: many(sizes),
+}))
+
+// PRODUCTS
+export type Product = InferSelectModel<typeof products>
