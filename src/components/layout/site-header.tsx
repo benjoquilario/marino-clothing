@@ -45,13 +45,16 @@ const Header = () => {
             ))}
           </ul>
           <div className="flex flex-1 justify-end">
-            <Link className="text-sm text-white/90 hover:text-white" href="/">
+            <Link
+              className="text-sm text-white/90 hover:text-white"
+              href="/sign-up"
+            >
               Create an Account
             </Link>
             <span className="ml-4 h-6 w-1 border-r border-gray-400"></span>
             <Link
               className="ml-4 text-sm text-white/90 hover:text-white"
-              href="/"
+              href="/sign-in"
             >
               Sign In
             </Link>
