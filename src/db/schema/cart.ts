@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core"
 
 import { users } from "./auth"
-import { CartItem } from "@/lib/validators/cart"
+import { type CartItem } from "@/lib/validators/cart"
 import { InferSelectModel } from "drizzle-orm"
 
 export const carts = pgTable("cart", {

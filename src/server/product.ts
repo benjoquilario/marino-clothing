@@ -1,12 +1,19 @@
 "use server"
 
-import { desc } from "drizzle-orm"
+import { desc, is } from "drizzle-orm"
 
 import { eq, count, sql, and, ilike } from "drizzle-orm/sql"
 import { db } from "@/db"
-import { products } from "@/db/schema/product"
+import { Product, products } from "@/db/schema/product"
 import { revalidatePath } from "next/cache"
-import { UpdateProduct, updateProductSchema } from "@/lib/validators/product"
+import {
+  insertProductSchema,
+  type UpdateProduct,
+  updateProductSchema,
+  type InsertProduct,
+} from "@/lib/validators/product"
+import { colors } from "@/db/schema/color"
+import { colorSchema, InsertColorItem } from "@/lib/validators/color"
 
 export async function getLatestProducts() {
   const data = await db.query.products.findMany({
@@ -108,6 +115,21 @@ export async function deleteProduct(id: string) {
   }
 }
 
+export async function createProduct(data: InsertProduct) {
+  try {
+    const product = insertProductSchema.parse(data)
+
+    await db.insert(products).values(product).returning()
+
+    return {
+      success: true,
+      message: "Product created successfully",
+    }
+  } catch (error) {
+    return { success: false, message: error }
+  }
+}
+
 export async function updateProduct(data: UpdateProduct) {
   try {
     const product = updateProductSchema.parse(data)
@@ -123,6 +145,31 @@ export async function updateProduct(data: UpdateProduct) {
     return {
       success: true,
       message: "Product updated successfully",
+    }
+  } catch (error) {
+    return { success: false, message: error }
+  }
+}
+
+export async function getColorsByProductId(productId: string) {
+  return await db.query.colors.findMany({
+    where: eq(colors.productId, productId),
+  })
+}
+
+export async function getColors() {
+  return await db.query.colors.findMany()
+}
+
+export async function createColor(data: InsertColorItem) {
+  try {
+    const color = colorSchema.parse(data)
+
+    await db.insert(colors).values(color)
+
+    return {
+      success: true,
+      message: "Product created successfully",
     }
   } catch (error) {
     return { success: false, message: error }

@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS "color" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"value" text NOT NULL,
+	"product_id" uuid NOT NULL,
+	"is_available" boolean DEFAULT true NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp DEFAULT now() NOT NULL
 );
@@ -109,6 +111,8 @@ CREATE TABLE IF NOT EXISTS "size" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"value" text NOT NULL,
+	"product_id" uuid,
+	"is_available" boolean DEFAULT true NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp DEFAULT now() NOT NULL
 );

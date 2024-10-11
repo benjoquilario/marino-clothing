@@ -72,6 +72,12 @@ export default async function AdminProductsPage({
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/admin/products/${product.id}`}>Edit</Link>
                   </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/admin/products/${product.id}/colors`}>Add Colors</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/admin/products/${product.id}/sizes`}>Add Sizes</Link>
+                  </Button>
                   <DeleteDialog
                     id={product.id}
                     // @ts-ignore

@@ -1,5 +1,5 @@
 {
-  "id": "3cfcee1f-dbed-4647-9fa5-60ad4bd84898",
+  "id": "16ba7259-0f71-4e0b-b655-d9d385fd8d60",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -374,6 +374,19 @@
           "primaryKey": false,
           "notNull": true
         },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_available": {
+          "name": "is_available",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
@@ -738,6 +751,19 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_available": {
+          "name": "is_available",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         },
         "createdAt": {
           "name": "createdAt",

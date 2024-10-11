@@ -1,6 +1,6 @@
 {
-  "id": "39b40b73-24fe-4460-b089-dbc89b57edb5",
-  "prevId": "16ba7259-0f71-4e0b-b655-d9d385fd8d60",
+  "id": "0b53dd1b-e0fd-4634-b8bc-74c3a12ffb35",
+  "prevId": "39b40b73-24fe-4460-b089-dbc89b57edb5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -374,31 +374,30 @@
           "primaryKey": false,
           "notNull": true
         },
-        "product_id": {
-          "name": "product_id",
+        "productId": {
+          "name": "productId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "is_available": {
-          "name": "is_available",
-          "type": "boolean",
+        "inStock": {
+          "name": "inStock",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "default": true
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         }
       },
@@ -442,12 +441,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "brand": {
-          "name": "brand",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "description": {
           "name": "description",
           "type": "text",
@@ -473,20 +466,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'0'"
-        },
-        "colors": {
-          "name": "colors",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::json"
-        },
-        "sizes": {
-          "name": "sizes",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::json"
         },
         "numReviews": {
           "name": "numReviews",
@@ -766,18 +745,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "product_id": {
-          "name": "product_id",
+        "productId": {
+          "name": "productId",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "is_available": {
-          "name": "is_available",
-          "type": "boolean",
+        "inStock": {
+          "name": "inStock",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "default": true
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",

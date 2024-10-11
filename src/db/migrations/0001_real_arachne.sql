@@ -1,1 +1,0 @@
-ALTER TABLE "color" ADD COLUMN "isAvailable" boolean DEFAULT true NOT NULL;

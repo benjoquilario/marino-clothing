@@ -1,4 +1,3 @@
-import { Color, Size } from "@/lib/validators/product"
 import {
   boolean,
   integer,
@@ -13,6 +12,8 @@ import {
 import { colors } from "./color"
 import { InferSelectModel, relations } from "drizzle-orm"
 import { sizes } from "./size"
+import { type Colors } from "./color"
+import { type Sizes } from "./size"
 
 export const products = pgTable(
   "product",
@@ -22,7 +23,6 @@ export const products = pgTable(
     slug: text("slug").notNull(),
     category: text("category").notNull(),
     images: text("images").array().notNull(),
-    brand: text("brand").notNull(),
     description: text("description").notNull(),
     stock: integer("stock").notNull(),
     price: numeric("price", { precision: 12, scale: 2 }).notNull().default("0"),
@@ -47,4 +47,7 @@ export const productsRelations = relations(products, ({ many }) => ({
 }))
 
 // PRODUCTS
-export type Product = InferSelectModel<typeof products>
+export type Product = InferSelectModel<typeof products> & {
+  colors: Colors[]
+  sizes: Sizes[]
+}
