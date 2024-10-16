@@ -32,12 +32,10 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { type Colors } from "@/db/schema/color"
-import { initialColors } from "@/lib/constant"
-import * as z from "zod"
-import { use } from "react"
-import { useProductStore } from "@/store/product"
-import { COLORS } from "@/config/site"
+import React, { use, useRef } from "react"
+import "@uploadthing/react/styles.css"
+import { useMediaUpload } from "@/hooks/use-media-upload"
+import { useDropzone } from "@uploadthing/react"
 
 const CreateForm = () => {
   const router = useRouter()
@@ -45,8 +43,20 @@ const CreateForm = () => {
     resolver: zodResolver(selectProductSchema),
   })
 
-  const setInStock = useProductStore((state) => state.setInStock)
-  const inStock = useProductStore((state) => state.inStock)
+  const {
+    startUpload,
+    attachments,
+    isUploading,
+    uploadProgress,
+    removeAttachment,
+    reset,
+  } = useMediaUpload()
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: startUpload,
+  })
+
+  console.log(attachments)
 
   const submit = async (values: InsertProduct) => {
     // await createProduct(values)
@@ -60,7 +70,6 @@ const CreateForm = () => {
     // }
   }
 
-  const images = form.watch("images")
   const isFeatured = form.watch("isFeatured")
   const banner = form.watch("banner")
 
@@ -182,7 +191,7 @@ const CreateForm = () => {
             )}
           />
         </div>
-        <div className="flex flex-col gap-5 md:flex-row">
+        {/* <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
             name="images"
@@ -193,10 +202,13 @@ const CreateForm = () => {
                   <CardContent className="mt-2 min-h-48 space-y-2">
                     <div className="flex-start space-x-2">
                       <FormControl>
-                        <Input
-                          type="file"
-                          onChange={(res: any) => {
-                            form.setValue("images", ["hsdasd", "sdasdasd"])
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res: any) => {
+                            form.setValue("images", [...images, res[0].url])
+                          }}
+                          onUploadError={(error: Error) => {
+                            alert(error.message)
                           }}
                         />
                       </FormControl>
@@ -208,7 +220,8 @@ const CreateForm = () => {
               </FormItem>
             )}
           />
-        </div>
+        </div> */}
+        <UploadAttachment onFileSelected={startUpload} disabled={isUploading} />
 
         <div>
           <Button
@@ -217,11 +230,45 @@ const CreateForm = () => {
             disabled={form.formState.isSubmitting}
             className="button col-span-2 w-full"
           >
-            Update
+            Create
           </Button>
         </div>
       </form>
     </Form>
   )
 }
+
+type UploadAttachmentProps = {
+  onFileSelected: (files: File[]) => void
+  disabled: boolean
+}
+
+const UploadAttachment: React.FC<UploadAttachmentProps> = ({
+  onFileSelected,
+  disabled,
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  return (
+    <>
+      <Button type="button" onClick={() => fileInputRef.current?.click()}>
+        Upload
+      </Button>
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        ref={fileInputRef}
+        className="sr-only"
+        onChange={(e) => {
+          const files = Array.from(e.target.files || [])
+          if (files.length) {
+            onFileSelected(files)
+          }
+        }}
+      />
+    </>
+  )
+}
+
 export default CreateForm

@@ -14,6 +14,7 @@ import {
 } from "@/lib/validators/product"
 import { colors } from "@/db/schema/color"
 import { colorSchema, InsertColorItem } from "@/lib/validators/color"
+import { attachments } from "@/db/schema/attachment"
 
 export async function getLatestProducts() {
   const data = await db.query.products.findMany({
@@ -115,11 +116,23 @@ export async function deleteProduct(id: string) {
   }
 }
 
-export async function createProduct(data: InsertProduct) {
+export async function createProduct(
+  data: InsertProduct,
+  key: string,
+  url: string
+) {
   try {
     const product = insertProductSchema.parse(data)
 
-    await db.insert(products).values(product).returning()
+    const insert = await db.insert(products).values(product).returning()
+
+    if (insert) {
+      await db.insert(attachments).values({
+        url,
+        key,
+        productId: insert[0].id,
+      })
+    }
 
     return {
       success: true,

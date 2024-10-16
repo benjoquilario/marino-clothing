@@ -10,7 +10,6 @@ export const colorsSchema = createSelectSchema(colors)
 export const sizesSchema = createSelectSchema(sizes)
 
 export const updateProductSchema = createSelectSchema(products, {
-  images: z.array(z.string()).min(1, "Product must have at least one image"),
   stock: z.coerce.number().min(0, "Stock must be at least 0"),
 }).omit({
   rating: true,
@@ -19,7 +18,6 @@ export const updateProductSchema = createSelectSchema(products, {
 })
 
 export const insertProductSchema = createSelectSchema(products, {
-  images: z.array(z.string()).min(1, "Product must have at least one image"),
   stock: z.coerce.number().min(0, "Stock must be at least 0"),
 }).omit({
   id: true,
