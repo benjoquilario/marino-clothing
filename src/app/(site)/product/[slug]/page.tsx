@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: { slug: string }
 }) {
   const product = await getProductBySlug(params.slug)
-  
+
   if (!product) {
     return { title: "Product not found" }
   }
@@ -100,6 +100,7 @@ const ProductDetails = async ({
                         price: roundTwo(product.price),
                         qty: 1,
                         image: product.images![0],
+                        color: "black",
                       }}
                     />
                   </div>

@@ -13,6 +13,7 @@ export const cartItemSchema = z.object({
       (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(value)),
       "Price must have exactly two decimal places (e.g., 49.99)"
     ),
+  color: z.string().min(1, "Color is required"),
 })
 
 export type CartItem = z.infer<typeof cartItemSchema>

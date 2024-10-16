@@ -57,6 +57,59 @@ const sampleData = {
       description:
         "A tricolour design brings a distinctive edge to these lightweight tracksuit pants made of diamond taffeta. ",
     },
+    {
+      name: "MEN'S LACOSTE SPORT FRENCH CAPSULE TRACKSUIT PANTS",
+      slug: "mens-lacoste-sport-french-capsule-tracksuit-pants",
+      category: "Track Pants",
+      images: ["/assets/images/p4-1.jpeg", "/assets/images/p4-2.jpeg"],
+      price: "125.95",
+      brand: "Lacoste",
+      rating: "3.6",
+      numReviews: 5,
+      stock: 10,
+      description:
+        "A tricolour design brings a distinctive edge to these lightweight tracksuit pants made of diamond taffeta. ",
+    },
+    {
+      name: "MEN'S LACOSTE SPORT FRENCH CAPSULE TRACKSUIT PANTS",
+      slug: "mens-lacoste-sport-french-capsule-tracksuit-pants",
+      category: "Track Pants",
+      images: ["/assets/images/p4-1.jpeg", "/assets/images/p4-2.jpeg"],
+      price: "125.95",
+      brand: "Lacoste",
+      rating: "3.6",
+      numReviews: 5,
+      stock: 10,
+      description:
+        "A tricolour design brings a distinctive edge to these lightweight tracksuit pants made of diamond taffeta. ",
+    },
+    {
+      name: "MEN'S LACOSTE SPORT FRENCH CAPSULE TRACKSUIT PANTS",
+      slug: "mens-lacoste-sport-french-capsule-tracksuit-pants",
+      category: "Track Pants",
+      images: ["/assets/images/p4-1.jpeg", "/assets/images/p4-2.jpeg"],
+      price: "125.95",
+      brand: "Lacoste",
+      rating: "3.6",
+      numReviews: 5,
+      stock: 10,
+      description:
+        "A tricolour design brings a distinctive edge to these lightweight tracksuit pants made of diamond taffeta. ",
+    },
+  ],
+  colors: [
+    {
+      name: "White",
+      productId: "1880877f-e04a-4db6-ba9c-40e332dcb853",
+      value: "#ffffff",
+      isAvailable: true,
+    },
+    {
+      name: "Black",
+      productId: "1880877f-e04a-4db6-ba9c-40e332dcb853",
+      value: "#ffffff",
+      isAvailable: true,
+    },
   ],
 }
 

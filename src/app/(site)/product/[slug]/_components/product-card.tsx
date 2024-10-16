@@ -11,12 +11,12 @@ const ProductCard = ({ product }: { product: Product }) => {
     <Card className="w-full max-w-sm">
       <CardHeader className="items-center p-0">
         <Link href={`/product/${product.slug}`}>
-          <Image
+          <img
             alt={product.name}
             className="aspect-square rounded object-cover"
-            height={300}
-            src={product.images![0]}
-            width={300}
+            height={200}
+            src="https://down-ph.img.susercontent.com/file/ph-11134207-7qul9-limq9a60efwma8.webp"
+            width={200}
           />
         </Link>
       </CardHeader>
@@ -30,7 +30,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           </Link>
         </div>
         <div className="flex-between gap-4">
-          <p>{product.rating} stars</p>
+          {/* <p>{product.rating} stars</p> */}
           {product.stock > 0 ? (
             <ProductPrice value={Number(product.price)} />
           ) : (

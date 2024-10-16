@@ -55,6 +55,7 @@ export const orderItems = pgTable(
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     image: text("image").notNull(),
+    color: text("color").notNull().default("white"),
   },
   (orderItem) => ({
     compoundKey: primaryKey({

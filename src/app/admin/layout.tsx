@@ -14,7 +14,17 @@ export default async function AdminLayout({
   const session = await auth()
 
   if (session?.user.role !== "admin")
-    throw new Error("admin permission required")
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <h1 className="h2-bold">Access Denied</h1>
+          <p className="mt-4">You are not authorized to access this page.</p>
+          <Link href="/">
+            <a className="btn mt-4">Go to Home</a>
+          </Link>
+        </div>
+      </div>
+    )
 
   return (
     <>

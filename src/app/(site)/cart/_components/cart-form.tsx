@@ -74,7 +74,7 @@ export default function CartForm({ cart }: { cart?: Cart }) {
                             if (!res.success) {
                               toast({
                                 variant: "destructive",
-                                description: `${res.message}` ?? "",
+                                description: `${res.message}`,
                               })
                             }
                           })
@@ -97,7 +97,7 @@ export default function CartForm({ cart }: { cart?: Cart }) {
                             if (!res.success) {
                               toast({
                                 variant: "destructive",
-                                description: `${res.message}` ?? "",
+                                description: `${res.message ?? ""}`,
                               })
                             }
                           })

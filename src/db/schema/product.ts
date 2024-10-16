@@ -7,7 +7,14 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
+  json,
 } from "drizzle-orm/pg-core"
+import { colors } from "./color"
+import { InferSelectModel, relations } from "drizzle-orm"
+import { sizes } from "./size"
+import { type Colors } from "./color"
+import { type Sizes } from "./size"
+import { attachments } from "./attachment"
 
 export const products = pgTable(
   "product",
@@ -16,8 +23,6 @@ export const products = pgTable(
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     category: text("category").notNull(),
-    images: text("images").array().notNull(),
-    brand: text("brand").notNull(),
     description: text("description").notNull(),
     stock: integer("stock").notNull(),
     price: numeric("price", { precision: 12, scale: 2 }).notNull().default("0"),
@@ -35,3 +40,17 @@ export const products = pgTable(
     }
   }
 )
+
+export const productsRelations = relations(products, ({ many }) => ({
+  colors: many(colors),
+  sizes: many(sizes),
+  attachments: many(attachments, {
+    relationName: "attachments",
+  }),
+}))
+
+// PRODUCTS
+export type Product = InferSelectModel<typeof products> & {
+  colors: Colors[]
+  sizes: Sizes[]
+}

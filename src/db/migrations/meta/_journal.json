@@ -1,0 +1,62 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1728116309779,
+      "tag": "0000_large_doctor_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728565965409,
+      "tag": "0001_tiresome_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728571357285,
+      "tag": "0002_lowly_betty_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1728571847595,
+      "tag": "0003_charming_lady_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1728572118723,
+      "tag": "0004_eminent_killraven",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1728633303314,
+      "tag": "0005_complete_cerise",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1728633688255,
+      "tag": "0006_yellow_blink",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1728636485189,
+      "tag": "0007_fearless_xavin",
+      "breakpoints": true
+    }
+  ]
+}

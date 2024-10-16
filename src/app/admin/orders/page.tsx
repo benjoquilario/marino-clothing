@@ -27,8 +27,6 @@ export default async function OrdersPage({
     page: Number(page),
   })
 
-  const deleteItem = async (orderId: string) => await deleteOrder(orderId)
-
   return (
     <div className="space-y-2">
       <h1 className="h2-bold">Orders</h1>
@@ -73,7 +71,7 @@ export default async function OrdersPage({
                   <DeleteDialog
                     id={order.id}
                     // @ts-expect-error
-                    action={() => deleteItem(order.id)}
+                    action={deleteOrder}
                   />
                 </TableCell>
               </TableRow>

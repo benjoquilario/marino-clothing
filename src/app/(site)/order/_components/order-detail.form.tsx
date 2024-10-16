@@ -52,7 +52,7 @@ export default function OrderDetailsForm({
     const res = await createPayPalOrder(order.id)
     if (!res.success)
       return toast({
-        description: `${res.message}` ?? "",
+        description: `${res.message}`,
         variant: "destructive",
       })
     return res.data
@@ -72,7 +72,7 @@ export default function OrderDetailsForm({
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
     const res = await approvePayPalOrder(order.id, data)
     toast({
-      description: `${res.message}` ?? "",
+      description: `${res.message}`,
       variant: res.success ? "default" : "destructive",
     })
   }
