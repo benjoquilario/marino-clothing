@@ -15,6 +15,7 @@ import { sizes } from "./size"
 import { type Colors } from "./color"
 import { type Sizes } from "./size"
 import { attachments } from "./attachment"
+import { StoreFile } from "@/types"
 
 export const products = pgTable(
   "product",
@@ -33,6 +34,7 @@ export const products = pgTable(
     isFeatured: boolean("isFeatured").default(false).notNull(),
     banner: text("banner"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
+    images: json("images").$type<StoreFile[] | null>().default(null),
   },
   (table) => {
     return {
