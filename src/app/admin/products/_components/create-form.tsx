@@ -5,7 +5,7 @@ import {
   insertProductSchema,
   updateProductSchema,
   selectProductSchema,
-} from "@/lib/validators/product"
+} from "@/lib/validations/product"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
@@ -40,7 +40,16 @@ import { useDropzone } from "@uploadthing/react"
 const CreateForm = () => {
   const router = useRouter()
   const form = useForm<InsertProduct>({
-    resolver: zodResolver(selectProductSchema),
+    resolver: zodResolver(insertProductSchema),
+    defaultValues: {
+      name: "",
+      slug: "",
+      category: "",
+      price: "0",
+      stock: 0,
+      description: "",
+      images: [],
+    },
   })
 
   const {
@@ -191,7 +200,7 @@ const CreateForm = () => {
             )}
           />
         </div>
-        {/* <div className="flex flex-col gap-5 md:flex-row">
+        <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
             name="images"
@@ -202,15 +211,21 @@ const CreateForm = () => {
                   <CardContent className="mt-2 min-h-48 space-y-2">
                     <div className="flex-start space-x-2">
                       <FormControl>
-                        <UploadButton
-                          endpoint="imageUploader"
-                          onClientUploadComplete={(res: any) => {
-                            form.setValue("images", [...images, res[0].url])
-                          }}
-                          onUploadError={(error: Error) => {
-                            alert(error.message)
-                          }}
-                        />
+                        <Dialog>
+                          <DialogTrigger>Open</DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>
+                                Are you absolutely sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your account and remove your
+                                data from our servers.
+                              </DialogDescription>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
                       </FormControl>
                     </div>
                   </CardContent>
@@ -220,8 +235,8 @@ const CreateForm = () => {
               </FormItem>
             )}
           />
-        </div> */}
-        <UploadAttachment onFileSelected={startUpload} disabled={isUploading} />
+        </div>
+        {/* <UploadAttachment onFileSelected={startUpload} disabled={isUploading} /> */}
 
         <div>
           <Button

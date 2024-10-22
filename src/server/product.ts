@@ -11,10 +11,11 @@ import {
   type UpdateProduct,
   updateProductSchema,
   type InsertProduct,
-} from "@/lib/validators/product"
+} from "@/lib/validations/product"
 import { colors } from "@/db/schema/color"
-import { colorSchema, InsertColorItem } from "@/lib/validators/color"
+import { colorSchema, InsertColorItem } from "@/lib/validations/color"
 import { attachments } from "@/db/schema/attachment"
+import { StoreFile } from "@/types"
 
 export async function getLatestProducts() {
   const data = await db.query.products.findMany({
@@ -32,6 +33,9 @@ export async function getProductBySlug(slug: string) {
 
 export async function getProductById(productId: string) {
   return await db.query.products.findFirst({
+    with: {
+      attachments: true,
+    },
     where: eq(products.id, productId),
   })
 }
@@ -116,23 +120,17 @@ export async function deleteProduct(id: string) {
   }
 }
 
-export async function createProduct(
-  data: InsertProduct,
-  key: string,
-  url: string
-) {
+export async function createProduct(data: InsertProduct) {
   try {
     const product = insertProductSchema.parse(data)
 
-    const insert = await db.insert(products).values(product).returning()
-
-    if (insert) {
-      await db.insert(attachments).values({
-        url,
-        key,
-        productId: insert[0].id,
+    await db
+      .insert(products)
+      .values({
+        ...product,
+        images: JSON.stringify(product.images) as unknown as StoreFile[],
       })
-    }
+      .returning()
 
     return {
       success: true,
@@ -153,7 +151,13 @@ export async function updateProduct(data: UpdateProduct) {
 
     if (!productExists) throw new Error("Product not found")
 
-    await db.update(products).set(product).where(eq(products.id, product.id))
+    await db
+      .update(products)
+      .set({
+        ...product,
+        images: JSON.stringify(product.images) as unknown as StoreFile[],
+      })
+      .where(eq(products.id, product.id))
     revalidatePath("/admin/products")
     return {
       success: true,

@@ -27,16 +27,6 @@ export const useMediaUpload = () => {
         )
       })
 
-      setAttachments((prev) => [
-        ...prev,
-        ...renamedFiles.map((file) => ({
-          file,
-          isUploading: true,
-          url: "",
-          key: "",
-        })),
-      ])
-
       return renamedFiles
     },
     onUploadProgress: setUploadProgress,
