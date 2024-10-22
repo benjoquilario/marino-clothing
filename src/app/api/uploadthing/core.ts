@@ -19,16 +19,8 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: isAuth.user.id }
     })
-    .onUploadComplete(async ({ file }) => {
-      const attachment = await db
-        .insert(attachments)
-        .values({
-          url: file.url,
-          key: file.key,
-        })
-        .returning({ id: attachments.id })
-
-      return { attachmentId: attachment[0].id }
+    .onUploadComplete(async ({ metadata, file }) => {
+      return { uploadedBy: metadata.userId }
     }),
 } satisfies FileRouter
 export type OurFileRouter = typeof ourFileRouter
