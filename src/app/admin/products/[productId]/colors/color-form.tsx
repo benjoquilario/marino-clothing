@@ -14,12 +14,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { createColor } from "@/server/product"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 type ColorFormProps = {
   productId: string
 }
 
 const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
+  const router = useRouter()
   const form = useForm<InsertColorItem>({
     resolver: zodResolver(colorSchema),
     defaultValues: {
@@ -39,7 +41,7 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
     if (!res.success) {
       console.log(res.message)
     } else {
-      console.log("success")
+      router.push(`/admin/products/${productId}/sizes`)
     }
   }
 
