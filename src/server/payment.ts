@@ -5,7 +5,7 @@ import { orders, products } from "@/db/schema"
 import { eq, sql } from "drizzle-orm"
 import { paypal } from "@/lib/payments/paypal"
 import { revalidatePath } from "next/cache"
-import { type PaymentResult } from "@/lib/validators/payment"
+import { type PaymentResult } from "@/lib/validations/payment"
 
 export async function createPayPalOrder(orderId: string) {
   try {

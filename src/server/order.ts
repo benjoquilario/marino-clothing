@@ -7,7 +7,7 @@ import { getUserById } from "./user"
 import { getCurrentCart } from "./cart"
 import { orders, orderItems, carts, products, users } from "@/db/schema"
 import { isRedirectError } from "next/dist/client/components/redirect"
-import { insertOrderSchema } from "@/lib/validators/payment"
+import { insertOrderSchema } from "@/lib/validations/payment"
 import { eq, desc, count, sql, sum } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 

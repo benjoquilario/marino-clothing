@@ -11,6 +11,11 @@ export const sizesSchema = createSelectSchema(sizes)
 
 export const updateProductSchema = createSelectSchema(products, {
   stock: z.coerce.number().min(0, "Stock must be at least 0"),
+  images: z
+    .custom<File[] | undefined | null>()
+    .optional()
+    .nullable()
+    .default(null),
 }).omit({
   rating: true,
   numReviews: true,
@@ -19,6 +24,11 @@ export const updateProductSchema = createSelectSchema(products, {
 
 export const insertProductSchema = createSelectSchema(products, {
   stock: z.coerce.number().min(0, "Stock must be at least 0"),
+  images: z
+    .custom<File[] | undefined | null>()
+    .optional()
+    .nullable()
+    .default(null),
 }).omit({
   id: true,
   rating: true,

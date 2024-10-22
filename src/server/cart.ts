@@ -5,7 +5,7 @@ import { auth } from "@/auth"
 import { db } from "@/db"
 import { carts, products } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
-import { CartItem, cartItemSchema } from "@/lib/validators/cart"
+import { CartItem, cartItemSchema } from "@/lib/validations/cart"
 import { revalidatePath } from "next/cache"
 import { calcPrice } from "@/lib/utils"
 

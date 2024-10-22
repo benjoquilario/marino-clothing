@@ -7,7 +7,7 @@ import {
   RegisterUser,
   userAuthSchema,
   userRegisterSchema,
-} from "@/lib/validators/auth"
+} from "@/lib/validations/auth"
 import { eq } from "drizzle-orm"
 import { signOut, signIn } from "@/auth"
 import { AuthError } from "next-auth"
