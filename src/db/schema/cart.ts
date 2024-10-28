@@ -1,16 +1,15 @@
 import {
-  uuid,
+  json,
+  numeric,
+  pgTable,
   text,
   timestamp,
-  json,
-  uniqueIndex,
-  pgTable,
-  numeric,
+  uuid,
 } from "drizzle-orm/pg-core"
 
-import { users } from "./auth"
-import { type CartItem } from "@/lib/validators/cart"
+import { type CartItem } from "@/lib/validations/cart"
 import { InferSelectModel } from "drizzle-orm"
+import { users } from "./auth"
 
 export const carts = pgTable("cart", {
   id: uuid("id").notNull().defaultRandom().primaryKey(),

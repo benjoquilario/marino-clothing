@@ -1,17 +1,15 @@
+import type { ShippingAddress } from "@/lib/validations/address"
 import {
-  uuid,
+  integer,
+  json,
+  pgTable,
+  primaryKey,
   text,
   timestamp,
-  json,
   uniqueIndex,
-  pgTable,
-  integer,
-  primaryKey,
+  uuid,
 } from "drizzle-orm/pg-core"
-import type { ShippingAddress } from "@/lib/validators/address"
 import type { AdapterAccountType } from "next-auth/adapters"
-import { relations } from "drizzle-orm"
-import { colors } from "./color"
 
 export const users = pgTable(
   "user",
@@ -77,4 +75,3 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 )
-

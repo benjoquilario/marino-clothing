@@ -1,18 +1,18 @@
+import type { ShippingAddress } from "@/lib/validations/address"
+import type { PaymentResult } from "@/lib/validations/payment"
+import { InferSelectModel, relations } from "drizzle-orm"
 import {
-  uuid,
+  boolean,
+  integer,
   json,
   numeric,
-  boolean,
-  timestamp,
-  text,
-  integer,
   pgTable,
   primaryKey,
+  text,
+  timestamp,
+  uuid,
 } from "drizzle-orm/pg-core"
-import type { ShippingAddress } from "@/lib/validators/address"
-import type { PaymentResult } from "@/lib/validators/payment"
-import { users, products } from "./"
-import { relations, InferSelectModel } from "drizzle-orm"
+import { products, users } from "./"
 
 export const orders = pgTable("order", {
   id: uuid("id").defaultRandom().primaryKey(),
