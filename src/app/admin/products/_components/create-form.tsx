@@ -1,17 +1,9 @@
 "use client"
 
-import {
-  type InsertProduct,
-  insertProductSchema,
-  updateProductSchema,
-  selectProductSchema,
-} from "@/lib/validations/product"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { createProduct, updateProduct } from "@/server/product"
-import { type Product } from "@/db/schema"
-import slugify from "slugify"
+import { FileUploader } from "@/components/file-uploader"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -20,27 +12,33 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import React, { use, useRef } from "react"
+import { useUploadFile } from "@/hooks/use-media-upload"
+import { getErrorMessage } from "@/lib/handle-error"
+import {
+  type CreateProduct,
+  createProductSchema,
+} from "@/lib/validations/product"
+import { createProduct } from "@/server/product"
+import { type StoredFile } from "@/types"
+import { zodResolver } from "@hookform/resolvers/zod"
 import "@uploadthing/react/styles.css"
-import { useMediaUpload } from "@/hooks/use-media-upload"
-import { useDropzone } from "@uploadthing/react"
+import { useRouter } from "next/navigation"
+import * as React from "react"
+import { useForm } from "react-hook-form"
+import slugify from "slugify"
+import { toast } from "sonner"
 
 const CreateForm = () => {
   const router = useRouter()
-  const form = useForm<InsertProduct>({
-    resolver: zodResolver(insertProductSchema),
+  const [loading, setLoading] = React.useState(false)
+  const { isUploading, progresses, startUpload } = useUploadFile("attachment", {
+    defaultUploadedFiles: [],
+  })
+
+  const form = useForm<CreateProduct>({
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
       slug: "",
@@ -52,25 +50,49 @@ const CreateForm = () => {
     },
   })
 
-  const {
-    startUpload,
-    attachments,
-    isUploading,
-    uploadProgress,
-    removeAttachment,
-    reset,
-  } = useMediaUpload()
+  // const {
+  //   startUpload,
+  //   attachments,
+  //   isUploading,
+  //   uploadProgress,
+  //   removeAttachment,
+  //   reset,
+  // } = useMediaUpload()
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: startUpload,
-  })
+  const submit = async (values: CreateProduct) => {
+    setLoading(true)
 
-  console.log(attachments)
+    toast.promise(
+      startUpload(values.images ?? []).then((data) => {
+        if (data) {
+          const uploadedFiles = data.map((file) => {
+            return {
+              id: file.key,
+              name: file.name,
+              url: file.url,
+            }
+          })
 
-  const submit = async (values: InsertProduct) => {
-    // await createProduct(values)
-
-    console.log(values)
+          return createProduct({
+            ...values,
+            images: JSON.stringify(uploadedFiles) as unknown as StoredFile[],
+          })
+        }
+      }),
+      {
+        loading: "Adding product...",
+        success: () => {
+          form.reset()
+          setLoading(false)
+          router.push(`/admin/products/color`)
+          return "Product added successfully"
+        },
+        error: (err) => {
+          setLoading(false)
+          return getErrorMessage(err)
+        },
+      }
+    )
 
     // if (!res.success) {
     //   console.log(res.message)
@@ -80,7 +102,6 @@ const CreateForm = () => {
   }
 
   const isFeatured = form.watch("isFeatured")
-  const banner = form.watch("banner")
 
   return (
     <Form {...form}>
@@ -166,7 +187,7 @@ const CreateForm = () => {
           <FormField
             control={form.control}
             name="stock"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Stock</FormLabel>
                 <FormControl>
@@ -204,28 +225,21 @@ const CreateForm = () => {
           <FormField
             control={form.control}
             name="images"
-            render={() => (
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Images</FormLabel>
                 <Card>
                   <CardContent className="mt-2 min-h-48 space-y-2">
                     <div className="flex-start space-x-2">
                       <FormControl>
-                        <Dialog>
-                          <DialogTrigger>Open</DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>
-                                Are you absolutely sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your account and remove your
-                                data from our servers.
-                              </DialogDescription>
-                            </DialogHeader>
-                          </DialogContent>
-                        </Dialog>
+                        <FileUploader
+                          value={field.value ?? []}
+                          onValueChange={field.onChange}
+                          maxFiles={4}
+                          maxSize={4 * 1024 * 1024}
+                          // progresses={progresses}
+                          disabled={isUploading}
+                        />
                       </FormControl>
                     </div>
                   </CardContent>
@@ -237,12 +251,38 @@ const CreateForm = () => {
           />
         </div>
         {/* <UploadAttachment onFileSelected={startUpload} disabled={isUploading} /> */}
-
+        <div>
+          <FormField
+            control={form.control}
+            name="isFeatured"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div>
           <Button
-            type="submit"
+            onClick={() =>
+              void form.trigger([
+                "name",
+                "slug",
+                "category",
+                "price",
+                "stock",
+                "description",
+              ])
+            }
+            disabled={loading}
             size="lg"
-            disabled={form.formState.isSubmitting}
             className="button col-span-2 w-full"
           >
             Create
@@ -250,39 +290,6 @@ const CreateForm = () => {
         </div>
       </form>
     </Form>
-  )
-}
-
-type UploadAttachmentProps = {
-  onFileSelected: (files: File[]) => void
-  disabled: boolean
-}
-
-const UploadAttachment: React.FC<UploadAttachmentProps> = ({
-  onFileSelected,
-  disabled,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  return (
-    <>
-      <Button type="button" onClick={() => fileInputRef.current?.click()}>
-        Upload
-      </Button>
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        ref={fileInputRef}
-        className="sr-only"
-        onChange={(e) => {
-          const files = Array.from(e.target.files || [])
-          if (files.length) {
-            onFileSelected(files)
-          }
-        }}
-      />
-    </>
   )
 }
 
