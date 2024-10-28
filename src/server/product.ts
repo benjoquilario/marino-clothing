@@ -1,21 +1,19 @@
 "use server"
 
-import { desc, is } from "drizzle-orm"
+import { desc } from "drizzle-orm"
 
-import { eq, count, sql, and, ilike } from "drizzle-orm/sql"
 import { db } from "@/db"
-import { Product, products } from "@/db/schema/product"
-import { revalidatePath } from "next/cache"
-import {
-  insertProductSchema,
-  type UpdateProduct,
-  updateProductSchema,
-  type InsertProduct,
-} from "@/lib/validations/product"
 import { colors } from "@/db/schema/color"
+import { products } from "@/db/schema/product"
 import { colorSchema, InsertColorItem } from "@/lib/validations/color"
-import { attachments } from "@/db/schema/attachment"
-import { StoreFile } from "@/types"
+import {
+  updateProductSchema,
+  type CreateProduct,
+  type UpdateProduct,
+} from "@/lib/validations/product"
+import { type StoredFile } from "@/types"
+import { and, count, eq, ilike, sql } from "drizzle-orm/sql"
+import { revalidatePath } from "next/cache"
 
 export async function getLatestProducts() {
   const data = await db.query.products.findMany({
@@ -120,28 +118,44 @@ export async function deleteProduct(id: string) {
   }
 }
 
-export async function createProduct(data: InsertProduct) {
+export async function createProduct(
+  data: Omit<CreateProduct, "images"> & {
+    images: StoredFile[]
+  }
+) {
   try {
-    const product = insertProductSchema.parse(data)
+    const checkProductName = await db.query.products.findFirst({
+      columns: {
+        id: true,
+      },
+      where: eq(products.name, data.name),
+    })
 
-    await db
-      .insert(products)
-      .values({
-        ...product,
-        images: JSON.stringify(product.images) as unknown as StoreFile[],
-      })
-      .returning()
+    if (checkProductName) {
+      throw new Error("Product name already taken.")
+    }
 
+    await db.insert(products).values({
+      ...data,
+      images: JSON.stringify(data.images) as unknown as StoredFile[],
+    })
+
+    revalidatePath("/admin/products/create")
     return {
+      data: null,
       success: true,
       message: "Product created successfully",
     }
   } catch (error) {
-    return { success: false, message: error }
+    return { success: false, message: error, data: null }
   }
 }
 
-export async function updateProduct(data: UpdateProduct) {
+export async function updateProduct(
+  data: Omit<UpdateProduct, "images"> & {
+    images: StoredFile[]
+  }
+) {
   try {
     const product = updateProductSchema.parse(data)
 
@@ -155,7 +169,7 @@ export async function updateProduct(data: UpdateProduct) {
       .update(products)
       .set({
         ...product,
-        images: JSON.stringify(product.images) as unknown as StoreFile[],
+        images: JSON.stringify(product.images) as unknown as StoredFile[],
       })
       .where(eq(products.id, product.id))
     revalidatePath("/admin/products")
