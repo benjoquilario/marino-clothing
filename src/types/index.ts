@@ -11,7 +11,7 @@ export interface Attachment {
   key: string
 }
 
-export interface StoreFile {
+export interface StoredFile {
   id: string
   name: string
   url: string
