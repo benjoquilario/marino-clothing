@@ -1,10 +1,10 @@
-import Link from "next/link"
-import Image from "next/image"
-import { MainNav } from "./_components/main-nav"
-import Menu from "@/components/header-menu"
-import { APP_NAME } from "@/lib/constant"
-import { Input } from "@/components/ui/input"
 import { auth } from "@/auth"
+import Menu from "@/components/header-menu"
+import { Input } from "@/components/ui/input"
+import { APP_NAME } from "@/lib/constant"
+import Image from "next/image"
+import Link from "next/link"
+import { MainNav } from "./_components/main-nav"
 
 export default async function AdminLayout({
   children,
@@ -19,9 +19,7 @@ export default async function AdminLayout({
         <div className="text-center">
           <h1 className="h2-bold">Access Denied</h1>
           <p className="mt-4">You are not authorized to access this page.</p>
-          <Link href="/">
-            <a className="btn mt-4">Go to Home</a>
-          </Link>
+          <Link href="/">Home</Link>
         </div>
       </div>
     )
