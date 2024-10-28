@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm"
 import { users } from "./db/schema/auth"
 import { authConfig } from "./auth.config"
 import { comparePasswords } from "./lib/auth/session"
-import { userAuthSchema } from "./lib/validators/auth"
+import { userAuthSchema } from "./lib/validations/auth"
 
 declare module "next-auth" {
   interface Session {
