@@ -1,12 +1,11 @@
-"use client"
-
-import { type OurFileRouter } from "@/app/api/uploadthing/core"
-import { getErrorMessage } from "@/lib/handle-error"
-import { useUploadThing } from "@/lib/uploadthing"
 import type { StoredFile } from "@/types"
 import * as React from "react"
 import { toast } from "sonner"
 import type { UploadFilesOptions } from "uploadthing/types"
+
+import { type OurFileRouter } from "@/app/api/uploadthing/core"
+import { getErrorMessage } from "@/lib/handle-error"
+import { uploadFiles } from "@/lib/uploadthing"
 
 interface UseUploadFileProps
   extends Pick<
@@ -22,10 +21,26 @@ export function useUploadFile(
 ) {
   const [uploadedFiles, setUploadedFiles] =
     React.useState<StoredFile[]>(defaultUploadedFiles)
-  const [progresses, setProgresses] = React.useState(0)
+  const [progresses, setProgresses] = React.useState<Record<string, number>>({})
+  const [isUploading, setIsUploading] = React.useState(false)
 
-  const { startUpload, isUploading } = useUploadThing(endpoint, {
-    onClientUploadComplete: (res) => {
+  async function uploadThings(files: File[]) {
+    setIsUploading(true)
+    try {
+      const res = await uploadFiles(endpoint, {
+        ...props,
+        files,
+        onUploadProgress: ({ file, progress }) => {
+          setProgresses((prev) => {
+            return {
+              ...prev,
+              // @ts-expect-error
+              [file]: progress,
+            }
+          })
+        },
+      })
+
       const formattedRes: StoredFile[] = res.map((file) => {
         return {
           id: file.key,
@@ -37,22 +52,18 @@ export function useUploadFile(
       setUploadedFiles((prev) =>
         prev ? [...prev, ...formattedRes] : formattedRes
       )
-    },
-    onUploadError: (err) => {
-      // setProgresses(progress)
+    } catch (err) {
       toast.error(getErrorMessage(err))
-    },
-    onUploadProgress: (progress) => {
-      // setProgresses(progress)
-      console.log("progress", progress)
-    },
-  })
+    } finally {
+      setProgresses({})
+      setIsUploading(false)
+    }
+  }
 
   return {
     uploadedFiles,
     progresses,
-    uploadFiles: uploadedFiles,
-    startUpload,
+    uploadFiles: uploadThings,
     isUploading,
   }
 }
