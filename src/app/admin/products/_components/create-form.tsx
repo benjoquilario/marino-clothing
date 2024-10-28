@@ -84,7 +84,7 @@ const CreateForm = () => {
         success: () => {
           form.reset()
           setLoading(false)
-          router.push(`/admin/products/color`)
+          router.push(`/admin/products/colors`)
           return "Product added successfully"
         },
         error: (err) => {

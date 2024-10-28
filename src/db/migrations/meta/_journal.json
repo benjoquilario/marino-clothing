@@ -57,6 +57,27 @@
       "when": 1728636485189,
       "tag": "0007_fearless_xavin",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1729575916299,
+      "tag": "0008_powerful_leech",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1729582409391,
+      "tag": "0009_giant_spyke",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1729592749007,
+      "tag": "0010_melted_zuras",
+      "breakpoints": true
     }
   ]
 }

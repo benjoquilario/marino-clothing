@@ -1,4 +1,3 @@
-import { getColors } from "@/server/product"
 import CreateForm from "../_components/create-form"
 
 const CreateProduct = async () => {

@@ -1,0 +1,1 @@
+ALTER TABLE "product" ADD COLUMN "images" json DEFAULT 'null'::json;

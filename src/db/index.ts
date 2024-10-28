@@ -1,11 +1,11 @@
 import { env } from "@/env.mjs"
-import { Pool } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-serverless"
+import { drizzle } from "drizzle-orm/postgres-js"
+import postgres from "postgres"
 import * as auth from "./schema/auth"
-import * as product from "./schema/product"
 import * as cart from "./schema/cart"
-import * as order from "./schema/order"
 import * as color from "./schema/color"
+import * as order from "./schema/order"
+import * as product from "./schema/product"
 import * as size from "./schema/size"
 
 export const schema = {
@@ -17,8 +17,5 @@ export const schema = {
   ...size,
 }
 
-const connection = new Pool({
-  connectionString: env.DATABASE_URL,
-})
-
+const connection = postgres(env.DATABASE_URL)
 export const db = drizzle(connection, { schema })

@@ -7,9 +7,9 @@ import { auth } from "@/auth"
 import {
   type ShippingAddress,
   shippingAddressSchema,
-} from "@/lib/validators/address"
+} from "@/lib/validations/address"
 import { revalidatePath } from "next/cache"
-import { PaymentMethod, paymentMethodSchema } from "@/lib/validators/payment"
+import { PaymentMethod, paymentMethodSchema } from "@/lib/validations/payment"
 
 export const getUserById = async function (userId: string) {
   const user = await db.query.users.findFirst({

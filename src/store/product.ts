@@ -1,3 +1,4 @@
+import { StoredFile } from "@/types"
 import { create } from "zustand"
 
 type ProductStore = {
@@ -5,6 +6,8 @@ type ProductStore = {
   inStock: number
   setColor: (color: string) => void
   setInStock: (inStock: number) => void
+  uploadedFiles: StoredFile[]
+  setUploadedFiles: (uploadedFiles: StoredFile[]) => void
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -12,4 +15,6 @@ export const useProductStore = create<ProductStore>((set) => ({
   inStock: 0,
   setColor: (color) => set({ color }),
   setInStock: (inStock) => set({ inStock }),
+  uploadedFiles: [],
+  setUploadedFiles: (uploadedFiles) => set({ uploadedFiles }),
 }))

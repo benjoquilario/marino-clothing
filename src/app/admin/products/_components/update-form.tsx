@@ -1,15 +1,6 @@
 "use client"
 
-import {
-  type InsertProduct,
-  insertProductSchema,
-  updateProductSchema,
-} from "@/lib/validators/product"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { updateProduct } from "@/server/product"
-import slugify from "slugify"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -18,20 +9,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { type Colors } from "@/db/schema/color"
 import { type Product } from "@/db/schema/product"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  type InsertProduct,
+  updateProductSchema,
+} from "@/lib/validations/product"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import slugify from "slugify"
 
 type UpdateFormProps = {
   productId: string
@@ -55,22 +44,18 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
       router.push(`/admin/products`)
       return
     }
-    const res = await updateProduct({ ...values, id: productId })
-    if (!res.success) {
-    } else {
-      router.push(`/admin/products`)
-    }
+    // const res = await updateProduct({ ...values, id: productId })
+    
   }
 
   const images = form.watch("images")
   const isFeatured = form.watch("isFeatured")
-  const banner = form.watch("banner")
 
   return (
     <Form {...form}>
       <form
         method="post"
-        onSubmit={form.handleSubmit(submit)}
+        // onSubmit={form.handleSubmit(submit)}
         className="space-y-8"
       >
         <div className="flex flex-col gap-5 md:flex-row">
@@ -137,7 +122,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="brand"
             render={({ field }: { field: any }) => (
@@ -150,7 +135,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
