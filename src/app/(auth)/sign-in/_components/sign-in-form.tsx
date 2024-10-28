@@ -9,7 +9,7 @@ import { login } from "@/server/auth"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { AuthUsers, userAuthSchema } from "@/lib/validators/auth"
+import { AuthUsers, userAuthSchema } from "@/lib/validations/auth"
 import {
   Form,
   FormControl,

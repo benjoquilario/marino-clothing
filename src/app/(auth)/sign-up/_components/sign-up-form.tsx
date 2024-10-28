@@ -18,7 +18,7 @@ import {
   RegisterUser,
   userAuthSchema,
   userRegisterSchema,
-} from "@/lib/validators/auth"
+} from "@/lib/validations/auth"
 import { register } from "@/server/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 
