@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { ToastAction } from "@/components/ui/toast"
+import type { Cart } from "@/db/schema"
 import { useToast } from "@/hooks/use-toast"
+import type { CartItem } from "@/lib/validations/cart"
+import { addItemToCart, removeItemFromCart } from "@/server/cart"
 import { Loader, Minus, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
-import type { Cart } from "@/db/schema"
-import type { CartItem } from "@/lib/validators/cart"
-import { addItemToCart, removeItemFromCart } from "@/server/cart"
 
 export default function AddToCart({
   cart,
