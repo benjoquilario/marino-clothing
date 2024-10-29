@@ -3,6 +3,7 @@
 import { desc } from "drizzle-orm"
 
 import { db } from "@/db"
+import { sizes } from "@/db/schema"
 import { colors } from "@/db/schema/color"
 import { products } from "@/db/schema/product"
 import { colorSchema, InsertColorItem } from "@/lib/validations/color"
@@ -11,6 +12,7 @@ import {
   type CreateProduct,
   type UpdateProduct,
 } from "@/lib/validations/product"
+import { InsertSizeItem, sizeItemSchema } from "@/lib/validations/size"
 import { type StoredFile } from "@/types"
 import { and, count, eq, ilike, sql } from "drizzle-orm/sql"
 import { revalidatePath } from "next/cache"
@@ -26,13 +28,18 @@ export async function getLatestProducts() {
 export async function getProductBySlug(slug: string) {
   return await db.query.products.findFirst({
     where: eq(products.slug, slug),
+    with: {
+      colors: true,
+      sizes: true,
+    },
   })
 }
 
 export async function getProductById(productId: string) {
   return await db.query.products.findFirst({
     with: {
-      attachments: true,
+      colors: true,
+      sizes: true,
     },
     where: eq(products.id, productId),
   })
@@ -200,7 +207,22 @@ export async function createColor(data: InsertColorItem) {
 
     return {
       success: true,
-      message: "Product created successfully",
+      message: "Color created successfully",
+    }
+  } catch (error) {
+    return { success: false, message: error }
+  }
+}
+
+export async function createSizes(data: InsertSizeItem) {
+  try {
+    const size = sizeItemSchema.parse(data)
+
+    await db.insert(sizes).values(size)
+
+    return {
+      success: true,
+      message: "Sizes created successfully",
     }
   } catch (error) {
     return { success: false, message: error }

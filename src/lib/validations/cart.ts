@@ -14,6 +14,7 @@ export const cartItemSchema = z.object({
       "Price must have exactly two decimal places (e.g., 49.99)"
     ),
   color: z.string().min(1, "Color is required"),
+  sizes: z.string().min(1, "Size is required"),
 })
 
 export type CartItem = z.infer<typeof cartItemSchema>

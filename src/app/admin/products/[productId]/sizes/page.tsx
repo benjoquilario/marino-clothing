@@ -1,6 +1,16 @@
-const SizePage = () => {
+import SizeForm from "./size-form"
+
+const SizePage = ({
+  params: { productId },
+}: {
+  params: {
+    productId: string
+  }
+}) => {
   return (
-    <div>SizePage</div>
+    <div>
+      <SizeForm productId={productId} />
+    </div>
   )
 }
 export default SizePage

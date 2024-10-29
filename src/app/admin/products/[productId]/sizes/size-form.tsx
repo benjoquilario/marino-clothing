@@ -9,20 +9,21 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { colorSchema, type InsertColorItem } from "@/lib/validations/color"
-import { createColor } from "@/server/product"
+import { type InsertColorItem } from "@/lib/validations/color"
+import { sizeItemSchema, type InsertSizeItem } from "@/lib/validations/size"
+import { createSizes } from "@/server/product"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
-type ColorFormProps = {
+type SizeFormProps = {
   productId: string
 }
 
-const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
+const SizeForm: React.FC<SizeFormProps> = ({ productId }) => {
   const router = useRouter()
-  const form = useForm<InsertColorItem>({
-    resolver: zodResolver(colorSchema),
+  const form = useForm<InsertSizeItem>({
+    resolver: zodResolver(sizeItemSchema),
     defaultValues: {
       name: "",
       value: "",
@@ -32,7 +33,7 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
   })
 
   const submit = async (values: InsertColorItem) => {
-    const res = await createColor({
+    const res = await createSizes({
       ...values,
       productId: productId,
     })
@@ -40,7 +41,7 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
     if (!res.success) {
       console.log(res.message)
     } else {
-      router.push(`/admin/products/${productId}/sizes`)
+      router.push(`/admin/products/${productId}/colors`)
     }
   }
 
@@ -49,6 +50,7 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
           <div className="flex flex-col gap-5 md:flex-row">
+            <div>Ex: Small, Extra Small, Large, Extra Large</div>
             <FormField
               control={form.control}
               name="name"
@@ -64,13 +66,13 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
               )}
             />
             <div>
-              <div>Must be hex value color</div>
+              <div>Ex: S, XS, M, XL, L, XXL </div>
               <FormField
                 control={form.control}
                 name="value"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Enter Hex Value</FormLabel>
+                    <FormLabel>Enter Sizes</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter hex value" {...field} />
                     </FormControl>
@@ -80,13 +82,13 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
                 )}
               />
             </div>
-
+            <div>Enter how many stock in that color have</div>
             <FormField
               control={form.control}
               name="inStock"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Color Instock</FormLabel>
+                  <FormLabel>Sizes Instock</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -106,4 +108,4 @@ const ColorForm: React.FC<ColorFormProps> = ({ productId }) => {
     </div>
   )
 }
-export default ColorForm
+export default SizeForm
