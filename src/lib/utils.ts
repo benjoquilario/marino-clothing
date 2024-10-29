@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
+import qs from "query-string"
 import { twMerge } from "tailwind-merge"
 import { CartItem } from "./validations/cart"
-import qs from "query-string"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -35,6 +35,10 @@ export const calcPrice = (items: CartItem[]) => {
     taxPrice: taxPrice.toFixed(2),
     totalPrice: totalPrice.toFixed(2),
   }
+}
+
+export const parseData = <T>(data?: T): T => {
+  return JSON.parse(data as any) as T
 }
 
 export function formUrlQuery({
